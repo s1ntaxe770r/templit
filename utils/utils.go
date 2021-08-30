@@ -2,19 +2,28 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
+	"github.com/briandowns/spinner"
+	"github.com/fatih/color"
+	resty "github.com/go-resty/resty/v2"
+	"github.com/jedib0t/go-pretty/v6/table"
+	"github.com/pkg/errors"
+	"github.com/s1ntaxe770r/templit/models"
+	"github.com/spf13/cobra"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
-
-	"github.com/pkg/errors"
-	"github.com/spf13/cobra"
+	"time"
 )
 
 const releaseurl = `https://api.github.com/repos/s1ntaxe770r/templit/releases/latest`
 
 // GetReleaseVersion returns the release version the user is currently running
 func GetReleaseVersion() (string, error) {
+	fmt.Println(color.YellowString("checking for a new release, hang tight"))
+	s := spinner.New(spinner.CharSets[2], 100*time.Millisecond)
+	s.Start()
 	resp, err := http.Get(releaseurl)
 	if err != nil {
 		return "", errors.Wrapf(err, "failed to make GET request to %s", releaseurl)
@@ -32,6 +41,7 @@ func GetReleaseVersion() (string, error) {
 	if data["tag_name"] != nil {
 		releasetag = data["tag_name"].(string)
 	}
+	s.Stop()
 	return releasetag, nil
 }
 
@@ -65,7 +75,30 @@ func CopyTemplate(src, dst string) error {
 	err = out.Sync()
 	return err
 }
-//
-//func CopyRemoteTemplate(url string) error{
-//
-//}
+
+func CopyRemoteTemplate(url,filename string) error{
+	client := resty.New()
+	color.HiYellowString("obtaining template from remote url. hang tight ⚙️")
+	s := spinner.New(spinner.CharSets[2], 100*time.Millisecond)
+	s.Color("yellow")
+	s.Start()
+	_, err := client.R().
+		SetOutput(GetTemplateDir()+"/"+filename).
+		Get(url)
+	if err != nil {
+		return  err
+	}
+	s.Stop()
+	color.HiGreenString("done ✅")
+	return nil
+}
+
+func TemplatetoTable(config []models.Template){
+	t := table.NewWriter()
+	tTemp := table.Table{}
+	tTemp.Render()
+	for _ , template := range config {
+		t.AppendRow([]interface{}{color.YellowString(template.Name), color.MagentaString("->"), color.GreenString(template.Path)})
+	}
+	fmt.Println(t.Render())
+}
