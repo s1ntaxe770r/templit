@@ -99,10 +99,10 @@ func initConfig() {
 	viper.AutomaticEnv() // read in environment variables that match
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		_, err2 := fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-		if err2 != nil {
-			return 
-		}
+		//_, err2 := fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+		//if err2 != nil {
+		//	return
+		//}
 	}
 
 }

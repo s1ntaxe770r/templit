@@ -16,38 +16,48 @@ limitations under the License.
 package cmd
 
 import (
-	"github.com/s1ntaxe770r/templit/models"
+	"fmt"
+	"github.com/fatih/color"
 	"github.com/s1ntaxe770r/templit/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"os"
 )
 
-// listCmd represents the list command
-var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "list templates",
-	Long: `outputs a table of all available templatedin config directory`,
-	Example: "templit list",
+// copyCmd represents the copy command
+var copyCmd = &cobra.Command{
+	Use:   "copy",
+	Short: "copy a template",
+	Long: `copy a template to the specified directory`,
+	Example: "templit copy [template name] [destination directory]",
 	Run: func(cmd *cobra.Command, args []string) {
-		var config []models.Template
-			for _, key := range viper.AllKeys() {
-				template := models.Template{Name: key, Path: viper.Get(key).(string)}
-				config = append(config,template)
-			}
-		utils.TemplatetoTable(config)
+		if len(args) < 2{
+			fmt.Println(color.RedString(" two arguments are required. Run templit list to see a list of available templates"))
+			os.Exit(1)
+		}
+		file := args[0]
+		dest := args[1]
+		directory := viper.Get(file)
+		fmt.Println(directory)
+		err := utils.CopyTemplate(directory.(string),dest)
+		if err != nil {
+			fmt.Println(color.RedString(err.Error()))
+			os.Exit(1)
+		}
+		fmt.Println(color.GreenString("successfully copied "+file +" to "+dest))
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(listCmd)
+	rootCmd.AddCommand(copyCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// listCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// copyCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// copyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
