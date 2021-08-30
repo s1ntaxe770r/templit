@@ -17,32 +17,40 @@ package cmd
 
 import (
 	"fmt"
-
+	"github.com/fatih/color"
 	"github.com/s1ntaxe770r/templit/utils"
 	"github.com/spf13/cobra"
 )
 
 // versionCmd represents the version command
+
+var (
+	check bool
+)
+
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "outputs your version of templit",
 	Long:  `outputs your current version of templit and checks for a updates if available`,
 	Args:  cobra.MinimumNArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
-		// latestrelease, err := utils.GetReleaseVersion()
-		// if err != nil {
-		// 	color.RedString(err.Error())
-		// }
-		// if localverion != latestrelease {
-		// 	color.YellowString(fmt.Sprintf(`you are currently running templit %s. However version %s is available, run "templit update" to upgrade to the latest verison`))
-		// }
-		// color.GreenString(localverion)
+		if check {
+			latestrelease, err := utils.GetReleaseVersion()
+			if err != nil {
+				color.RedString(err.Error())
+			}
+			if utils.TEMPLITVERSION != latestrelease {
+				color.YellowString(fmt.Sprintf(`you are currently running templit %s. However version %s is available, run "templit update" to upgrade to the latest verison`))
+			}
+			color.GreenString(utils.TEMPLITVERSION)
+		}
 		fmt.Println(utils.TEMPLITVERSION)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(versionCmd)
+	versionCmd.Flags().BoolVarP(&check,"check","c",false,"check if an update is availaible")
 	// Here you will define your flags and configuration settings.
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
