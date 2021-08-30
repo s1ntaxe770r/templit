@@ -15,7 +15,9 @@ limitations under the License.
 */
 package main
 
-import "github.com/s1ntaxe770r/templit/cmd"
+import (
+	"github.com/s1ntaxe770r/templit/cmd"
+)
 
 func main() {
 	cmd.Execute()
