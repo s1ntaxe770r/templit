@@ -93,7 +93,7 @@ func initConfig() {
 		} else {
 			fmt.Println(color.RedString("failed to create templates directory, " + err.Error()))
 		}
-		fmt.Println(color.GreenString("done ✔"))
+		fmt.Println(color.GreenString("done ✅"))
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
