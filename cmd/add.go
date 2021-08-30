@@ -28,6 +28,7 @@ import (
 var (
 	TemplateName string
 	file         string
+
 )
 
 // addCmd represents the add command
@@ -55,6 +56,7 @@ func init() {
 	rootCmd.AddCommand(addCmd)
 	addCmd.Flags().StringVarP(&TemplateName, "template-name", "n", "", "assigns a name to the the file being added as a template")
 	addCmd.Flags().StringVarP(&file, "file", "f", "", "path to the file you are trying to copy")
+	//addCmd.Flags().StringVarP(&remote,"remote","f","","url of the remote template you wish to add")
 	addCmd.MarkFlagRequired("file")
 	addCmd.MarkFlagRequired("template-name")
 
