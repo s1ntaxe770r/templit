@@ -1,6 +1,5 @@
 package models
 
 type Template struct {
-	Name , Path string
+	Name, Path string
 }
-

@@ -26,25 +26,25 @@ import (
 )
 
 var (
-	file string  
+	file        string
 	destination string
-
 )
+
 // copyCmd represents the copy command
 var copyCmd = &cobra.Command{
-	Use:   "copy",
-	Short: "copy a template",
-	Long: `copy a template to the specified directory`,
+	Use:     "copy",
+	Short:   "copy a template",
+	Long:    `copy a template to the specified directory`,
 	Example: "templit copy [template name] [destination directory]",
 	Run: func(cmd *cobra.Command, args []string) {
 		directory := viper.Get(file)
 		fmt.Println(directory)
-		err := utils.CopyTemplate(directory.(string),destination)
+		err := utils.CopyTemplate(directory.(string), destination)
 		if err != nil {
 			fmt.Println(color.RedString(err.Error()))
 			os.Exit(1)
 		}
-		fmt.Println(color.GreenString("successfully copied "+file +" to "+destination))
+		fmt.Println(color.GreenString("successfully copied " + file + " to " + destination))
 	},
 }
 
@@ -56,8 +56,8 @@ func init() {
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// copyCmd.PersistentFlags().String("foo", "", "A help for foo")
-        copyCmd.Flags().StringVarP(&file,"file","f","","file to copy")
-	copyCmd.Flags().StringVarP(&destination,"destination","d","","destination ")
+	copyCmd.Flags().StringVarP(&file, "file", "f", "", "file to copy")
+	copyCmd.Flags().StringVarP(&destination, "destination", "d", "", "destination ")
 	copyCmd.MarkFlagRequired("file")
 	copyCmd.MarkFlagRequired("destination")
 	// Cobra supports local flags which will only run when this command

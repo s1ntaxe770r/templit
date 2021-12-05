@@ -55,51 +55,51 @@ func GetTemplateDir() string {
 }
 
 func CopyTemplate(src, dst string) error {
-srcFile, err := os.Open(src)
-if err != nil {
-return err 
-}
-    defer srcFile.Close()
+	srcFile, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer srcFile.Close()
 
-    destFile, err := os.Create(dst) // creates if file doesn't exist
-    if err != nil{
-	    return err
-    }
-    defer destFile.Close()
+	destFile, err := os.Create(dst) // creates if file doesn't exist
+	if err != nil {
+		return err
+	}
+	defer destFile.Close()
 
-    _, err = io.Copy(destFile, srcFile) // check first var for number of bytes copied
-    if err != nil {
-	    return err
-    }
-    err = destFile.Sync()
-    if err !=nil{
-	    return err
-    }
+	_, err = io.Copy(destFile, srcFile) // check first var for number of bytes copied
+	if err != nil {
+		return err
+	}
+	err = destFile.Sync()
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
-func CopyRemoteTemplate(url,filename string) error{
+func CopyRemoteTemplate(url, filename string) error {
 	client := resty.New()
 	color.HiYellowString("obtaining template from remote url. hang tight ⚙️")
 	s := spinner.New(spinner.CharSets[2], 100*time.Millisecond)
 	s.Color("yellow")
 	s.Start()
 	_, err := client.R().
-		SetOutput(GetTemplateDir()+"/"+filename).
+		SetOutput(GetTemplateDir() + "/" + filename).
 		Get(url)
 	if err != nil {
-		return  err
+		return err
 	}
 	s.Stop()
 	color.HiGreenString("done ✅")
 	return nil
 }
 
-func TemplatetoTable(config []models.Template){
+func TemplatetoTable(config []models.Template) {
 	t := table.NewWriter()
 	tTemp := table.Table{}
 	tTemp.Render()
-	for _ , template := range config {
+	for _, template := range config {
 		t.AppendRow([]interface{}{color.YellowString(template.Name), color.MagentaString("->"), color.GreenString(template.Path)})
 	}
 	fmt.Println(t.Render())

@@ -67,12 +67,12 @@ func initConfig() {
 	} else {
 		// Search config in home directory with name ".templit" (without extension).
 
-		viper.AddConfigPath(homedir+"/.config/templit")
+		viper.AddConfigPath(homedir + "/.config/templit")
 		viper.SetConfigType("yaml")
 		viper.SetConfigName("templit")
-		if err := viper.SafeWriteConfigAs(homedir+"/.config/templit/templit.yaml"); err != nil {
+		if err := viper.SafeWriteConfigAs(homedir + "/.config/templit/templit.yaml"); err != nil {
 			if os.IsNotExist(err) {
-				err = viper.WriteConfigAs(homedir+"/.config/templit/templit.yaml")
+				err = viper.WriteConfigAs(homedir + "/.config/templit/templit.yaml")
 				if err != nil {
 					fmt.Println(color.RedString(err.Error()))
 				}
@@ -81,7 +81,7 @@ func initConfig() {
 
 	}
 
-	if _, err := os.Stat(homedir+"/.config/templit/templates"); err != nil {
+	if _, err := os.Stat(homedir + "/.config/templit/templates"); err != nil {
 		if os.IsNotExist(err) {
 			fmt.Println(color.HiYellowString("{info:} template directory does not exist. Creating one at" + homedir + "/.config/templit/templates"))
 			err = os.MkdirAll(homedir+"/.config/templit/templates", 0755)

@@ -24,16 +24,16 @@ import (
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "list templates",
-	Long: `outputs a table of all available templatedin config directory`,
+	Use:     "list",
+	Short:   "list templates",
+	Long:    `outputs a table of all available templatedin config directory`,
 	Example: "templit list",
 	Run: func(cmd *cobra.Command, args []string) {
 		var config []models.Template
-			for _, key := range viper.AllKeys() {
-				template := models.Template{Name: key, Path: viper.Get(key).(string)}
-				config = append(config,template)
-			}
+		for _, key := range viper.AllKeys() {
+			template := models.Template{Name: key, Path: viper.Get(key).(string)}
+			config = append(config, template)
+		}
 		utils.TemplatetoTable(config)
 	},
 }

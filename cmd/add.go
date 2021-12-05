@@ -27,8 +27,7 @@ import (
 
 var (
 	TemplateName string
-	addfile         string
-
+	addfile      string
 )
 
 // addCmd represents the add command
@@ -37,7 +36,7 @@ var addCmd = &cobra.Command{
 	Short: "Add a new template",
 	Long:  `A longer description`,
 	Run: func(cmd *cobra.Command, args []string) {
-		dest := utils.GetTemplateDir()+ addfile
+		dest := utils.GetTemplateDir() + addfile
 		err := utils.CopyTemplate(addfile, dest)
 		if err != nil {
 			fmt.Println(color.RedString(err.Error()))

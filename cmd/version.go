@@ -50,7 +50,7 @@ var versionCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(versionCmd)
-	versionCmd.Flags().BoolVarP(&check,"check","c",false,"check if an update is availaible")
+	versionCmd.Flags().BoolVarP(&check, "check", "c", false, "check if an update is availaible")
 	// Here you will define your flags and configuration settings.
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
