@@ -17,13 +17,19 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/fatih/color"
 	"github.com/s1ntaxe770r/templit/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"os"
 )
 
+var (
+	file string  
+	destination string
+
+)
 // copyCmd represents the copy command
 var copyCmd = &cobra.Command{
 	Use:   "copy",
@@ -31,20 +37,14 @@ var copyCmd = &cobra.Command{
 	Long: `copy a template to the specified directory`,
 	Example: "templit copy [template name] [destination directory]",
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 2{
-			fmt.Println(color.RedString(" two arguments are required. Run templit list to see a list of available templates"))
-			os.Exit(1)
-		}
-		file := args[0]
-		dest := args[1]
 		directory := viper.Get(file)
 		fmt.Println(directory)
-		err := utils.CopyTemplate(directory.(string),dest)
+		err := utils.CopyTemplate(directory.(string),destination)
 		if err != nil {
 			fmt.Println(color.RedString(err.Error()))
 			os.Exit(1)
 		}
-		fmt.Println(color.GreenString("successfully copied "+file +" to "+dest))
+		fmt.Println(color.GreenString("successfully copied "+file +" to "+destination))
 	},
 }
 
@@ -56,7 +56,10 @@ func init() {
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// copyCmd.PersistentFlags().String("foo", "", "A help for foo")
-
+        copyCmd.Flags().StringVarP(&file,"file","f","","file to copy")
+	copyCmd.Flags().StringVarP(&destination,"destination","d","","destination ")
+	copyCmd.MarkFlagRequired("file")
+	copyCmd.MarkFlagRequired("destination")
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// copyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
