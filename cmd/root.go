@@ -31,7 +31,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "templit",
 	Short: "boring template manager",
-	Long:  `templit is a command line application that helps you manage various templates and config files so you don't have too`,
+	Long:  `templit is a that CLI  helps you manage various templates and config file`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
