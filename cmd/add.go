@@ -27,7 +27,7 @@ import (
 
 var (
 	TemplateName string
-	file         string
+	addfile         string
 
 )
 
@@ -37,8 +37,8 @@ var addCmd = &cobra.Command{
 	Short: "Add a new template",
 	Long:  `A longer description`,
 	Run: func(cmd *cobra.Command, args []string) {
-		dest := fmt.Sprintf(utils.GetTemplateDir()+"/%s", file)
-		err := utils.CopyTemplate(file, dest)
+		dest := utils.GetTemplateDir()+ addfile
+		err := utils.CopyTemplate(addfile, dest)
 		if err != nil {
 			fmt.Println(color.RedString(err.Error()))
 			os.Exit(1)
@@ -55,7 +55,7 @@ var addCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(addCmd)
 	addCmd.Flags().StringVarP(&TemplateName, "template-name", "n", "", "assigns a name to the the file being added as a template")
-	addCmd.Flags().StringVarP(&file, "file", "f", "", "path to the file you are trying to copy")
+	addCmd.Flags().StringVarP(&addfile, "file", "f", "", "path to the file you are trying to copy")
 	//addCmd.Flags().StringVarP(&remote,"remote","f","","url of the remote template you wish to add")
 	addCmd.MarkFlagRequired("file")
 	addCmd.MarkFlagRequired("template-name")
