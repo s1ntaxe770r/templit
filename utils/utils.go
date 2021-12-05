@@ -3,6 +3,12 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/briandowns/spinner"
 	"github.com/fatih/color"
 	resty "github.com/go-resty/resty/v2"
@@ -10,11 +16,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/s1ntaxe770r/templit/models"
 	"github.com/spf13/cobra"
-	"io"
-	"io/ioutil"
-	"net/http"
-	"os"
-	"time"
 )
 
 const releaseurl = `https://api.github.com/repos/s1ntaxe770r/templit/releases/latest`
@@ -54,26 +55,27 @@ func GetTemplateDir() string {
 }
 
 func CopyTemplate(src, dst string) error {
-	in, err := os.Open(src)
-	if err != nil {
-		return err
-	}
-	defer in.Close()
-	out, err := os.Create(dst)
-	if err != nil {
-		return  err
-	}
-	defer func() {
-		cerr := out.Close()
-		if err == nil {
-			err = cerr
-		}
-	}()
-	if _, err = io.Copy(out, in); err != nil {
-		return err
-	}
-	err = out.Sync()
-	return err
+srcFile, err := os.Open(src)
+if err != nil {
+return err 
+}
+    defer srcFile.Close()
+
+    destFile, err := os.Create(dst) // creates if file doesn't exist
+    if err != nil{
+	    return err
+    }
+    defer destFile.Close()
+
+    _, err = io.Copy(destFile, srcFile) // check first var for number of bytes copied
+    if err != nil {
+	    return err
+    }
+    err = destFile.Sync()
+    if err !=nil{
+	    return err
+    }
+	return nil
 }
 
 func CopyRemoteTemplate(url,filename string) error{
